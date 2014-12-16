@@ -48,7 +48,7 @@ namespace PoeHUD.Poe.EntityComponents
 		{
 			get
 			{
-				List<ItemMod> list = new List<ItemMod>();
+				/*List<ItemMod> list = new List<ItemMod>();
 				if (this.Address == 0)
 				{
 					return list;
@@ -65,7 +65,29 @@ namespace PoeHUD.Poe.EntityComponents
 					list.Add(base.GetObject<ItemMod>(i));
 					i += 24;
 				}
-				return list;
+				return list;*/
+                List<ItemMod> list = new List<ItemMod>();
+                if (this.Address == 0)
+                {
+                    return list;
+                }
+                int startAdressOfMods = this.M.ReadInt(this.Address + 96);
+                int endAdressOfMods = this.M.ReadInt(this.Address + 100);
+                int numberOfMods = (endAdressOfMods - startAdressOfMods) / 24;
+
+                if (numberOfMods > 12)
+                {
+                    return list;
+                }
+
+                int currentModAddress = startAdressOfMods;
+                while (currentModAddress < endAdressOfMods)
+                {
+                    list.Add(base.GetObject<ItemMod>(currentModAddress));
+                    currentModAddress += 24;
+                }
+                return list;
+
 			}
 		}
 		public List<ItemMod> ImplicitMods
