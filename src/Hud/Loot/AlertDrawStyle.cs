@@ -13,6 +13,6 @@ namespace PoeHUD.Hud.Loot
 
 		public MapIcon IconForMap;
 		public string SoundFileName;
-		public SoundPlayer soundToPlay;
+        public SoundPlayer soundToPlay = Sounds.AlertSound;
 	}
 }

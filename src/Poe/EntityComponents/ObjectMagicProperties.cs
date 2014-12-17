@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PoeHUD.Framework;
 using PoeHUD.Game;
+using System;
 
 namespace PoeHUD.Poe.EntityComponents
 {
@@ -26,14 +27,22 @@ namespace PoeHUD.Poe.EntityComponents
 				{
 					return new List<string>();
 				}
-				int num = this.M.ReadInt(this.Address + 54);
-				int num2 = this.M.ReadInt(this.Address + 58);
+                //for (var offset = 0; offset <= 128; offset++)
+                //{
+                //    var __begin = this.M.ReadInt(this.Address + offset);
+                //    var __end = this.M.ReadInt(this.Address + offset + 4);
+                //    var __amount = (__end - __begin) / 24;
+
+                //    Console.WriteLine(offset.ToString() + ": " + __amount);
+                //}
+				int begin = this.M.ReadInt(this.Address + 84);
+				int end = this.M.ReadInt(this.Address + 88);
 				List<string> list = new List<string>();
-				if (num == 0 || num2 == 0)
+				if (begin == 0 || end == 0)
 				{
 					return list;
 				}
-				for (int i = num; i < num2; i += 24)
+				for (int i = begin; i < end; i += 24)
 				{
 					string item = this.M.ReadStringU(this.M.ReadInt(i + 20, 0), 256, true);
 					list.Add(item);
