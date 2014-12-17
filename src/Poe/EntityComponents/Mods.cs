@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PoeHUD.Controllers;
 using PoeHUD.Game;
+using System.Linq;
 
 namespace PoeHUD.Poe.EntityComponents
 {
@@ -46,78 +47,6 @@ namespace PoeHUD.Poe.EntityComponents
 
 		public List<ItemMod> ItemMods
 		{
-			get
-			{
-				/*List<ItemMod> list = new List<ItemMod>();
-				if (this.Address == 0)
-				{
-					return list;
-				}
-				int i = this.M.ReadInt(this.Address + 68);
-				int num = this.M.ReadInt(this.Address + 72);
-				int num2 = (num - i) / 24;
-				if (num2 > 12)
-				{
-					return list;
-				}
-				while (i < num)
-				{
-					list.Add(base.GetObject<ItemMod>(i));
-					i += 24;
-				}
-				return list;*/
-                List<ItemMod> list = new List<ItemMod>();
-                if (this.Address == 0)
-                {
-                    return list;
-                }
-                int startAdressOfMods = this.M.ReadInt(this.Address + 96);
-                int endAdressOfMods = this.M.ReadInt(this.Address + 100);
-                int numberOfMods = (endAdressOfMods - startAdressOfMods) / 24;
-
-                if (numberOfMods > 12)
-                {
-                    return list;
-                }
-
-                int currentModAddress = startAdressOfMods;
-                while (currentModAddress < endAdressOfMods)
-                {
-                    list.Add(base.GetObject<ItemMod>(currentModAddress));
-                    currentModAddress += 24;
-                }
-                return list;
-
-			}
-		}
-		public List<ItemMod> ImplicitMods
-		{
-			get
-			{
-				List<ItemMod> list = new List<ItemMod>();
-				if (this.Address == 0)
-				{
-					return list;
-				}
-				int i = this.M.ReadInt(this.Address + 52);
-				int num = this.M.ReadInt(this.Address + 56);
-				int num2 = (num - i) / 24;
-				if (num2 > 100 || num2 <= 0)
-				{
-					return list;
-				}
-				while (i < num)
-				{
-					list.Add(base.GetObject<ItemMod>(i));
-					i += 24;
-				}
-				return list;
-			}
-		}
-
-		/*
-		 * 
-		 * {
             get
             {
                 var implicitMods = GetMods(0x50, 0x54);
@@ -143,6 +72,5 @@ namespace PoeHUD.Poe.EntityComponents
 
             return list;
         }
-		 * */
 	}
 }
