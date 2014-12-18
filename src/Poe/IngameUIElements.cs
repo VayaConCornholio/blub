@@ -1,5 +1,6 @@
 using PoeHUD.Framework;
 using PoeHUD.Poe.UI;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace PoeHUD.Poe
@@ -100,7 +101,7 @@ namespace PoeHUD.Poe
 
 		public Element WorldPanel { get { return ReadObjectAt<Element>(4+0x118); } }
 
-		public BigMinimap Minimap { get { return ReadObjectAt<BigMinimap>(0x120 + 8); } }
+		public BigMinimap Minimap { get { return ReadObjectAt<BigMinimap>(0x120 + 12); } }
 
 		public Element ItemsOnGroundLabels { get { return ReadObjectAt<Element>(4+0x120); } }
 
@@ -125,7 +126,7 @@ namespace PoeHUD.Poe
 		// dunno what it is
 		public Element SwitchingZoneInfo { get { return ReadObjectAt<Element>(0x1C8); } }
 
-		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(0x208); } }
+		public Element GemLvlUpPanel { get { return ReadObjectAt<Element>(0x20C); } }
 
 		public Element ItemOnGroundTooltip { get { return ReadObjectAt<Element>(4+0x208); } }
 
