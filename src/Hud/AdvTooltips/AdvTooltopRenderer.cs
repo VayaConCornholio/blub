@@ -113,54 +113,55 @@ namespace PoeHUD.Hud.AdvTooltips
 			rc.AddTextWithHeight(new Vec2(clientRect.X + 2, clientRect.Y + 2), text, Color.White, 14, DrawTextFormat.Left);
 		}
 
-		private static int drawStatLine(RenderingContext rc, RollValue item, Rect clientRect, int yPos)
-		{
-			const int leftRuler = 50;
+        private static int drawStatLine(RenderingContext rc, RollValue item, Rect clientRect, int yPos)
+        {
+            const int leftRuler = 50;
 
-			bool isUniqAffix = item.AffixType == ModsDat.ModType.Hidden;
-			string prefix = item.AffixType == ModsDat.ModType.Prefix
-				? "[P]"
-				: item.AffixType == ModsDat.ModType.Suffix ? "[S]" : "[?]";
-			if (!isUniqAffix)
-			{
-				if( item.CouldHaveTiers())
-					prefix += " T" + item.Tier + " ";
+            bool isUniqAffix = item.AffixType == ModsDat.ModType.Hidden;
+            string prefix = item.AffixType == ModsDat.ModType.Prefix
+            ? "[P]"
+            : item.AffixType == ModsDat.ModType.Suffix ? "[S]" : "[?]";
+            if (!isUniqAffix)
+            {
+                if (item.CouldHaveTiers())
+                    prefix += " T" + item.Tier + " ";
+                rc.AddTextWithHeight(new Vec2(clientRect.X + 5, yPos), prefix, item.TextColor, 8, DrawTextFormat.Left);
+                var textSize = rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler, yPos), item.AffixText, item.TextColor, 8,
+                DrawTextFormat.Left);
+                yPos += textSize.Y;
+            }
 
-				rc.AddTextWithHeight(new Vec2(clientRect.X + 5, yPos), prefix, Color.White, 8, DrawTextFormat.Left);
-				var textSize = rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler, yPos), item.AffixText, item.TextColor, 8,
-					DrawTextFormat.Left);
-				yPos += textSize.Y;
-			}
+            for (int iStat = 0; iStat < 4; iStat++)
+            {
+                IntRange range = item.TheMod.StatRange[iStat];
+                if (range.Min == 0 && range.Max == 0)
+                    continue;
 
-			for (int iStat = 0; iStat < 4; iStat++)
-			{
-				IntRange range = item.TheMod.StatRange[iStat];
-				if(range.Min == 0 && range.Max == 0)
-					continue;
+                var theStat = item.TheMod.StatNames[iStat];
+                if (theStat != null)
+                {
+                    int val = item.StatValue[iStat];
+                    float percents = range.GetPercentage(val);
+                    bool noSpread = !range.HasSpread();
 
-				var theStat = item.TheMod.StatNames[iStat];
-				int val = item.StatValue[iStat];
-				float percents = range.GetPercentage(val);
-				bool noSpread = !range.HasSpread();
+                    double hue = 120 * percents;
+                    if (noSpread) hue = 300;
+                    if (percents > 1) hue = 180;
 
-				double hue = 120 * percents;
-				if (noSpread) hue = 300;
-				if (percents > 1) hue = 180;
-				
-				Color col = ColorUtils.ColorFromHsv(hue, 1, 1);
+                    Color col = ColorUtils.ColorFromHsv(hue, 1, 1);
 
-				string line2 = string.Format(noSpread ? "{0}" : "{0} [{1}]", theStat, range);
+                    string line2 = string.Format(noSpread ? "{0}" : "{0} [{1}]", theStat, range);
 
-				rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler, yPos), line2, Color.White, 8, DrawTextFormat.Left);
+                    rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler, yPos), line2, Color.White, 8, DrawTextFormat.Left);
 
-				string sValue = theStat.ValueToString(val);
-				var txSize = rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler - 5, yPos), sValue,
-					col, 8,
-					DrawTextFormat.Right);
-
-				yPos += txSize.Y;
-			}
-			return yPos;
-		}
+                    string sValue = theStat.ValueToString(val);
+                    var txSize = rc.AddTextWithHeight(new Vec2(clientRect.X + leftRuler - 5, yPos), sValue,
+                    col, 8,
+                    DrawTextFormat.Right);
+                    yPos += txSize.Y;
+                }
+            }
+            return yPos;
+        }
 	}
 }
